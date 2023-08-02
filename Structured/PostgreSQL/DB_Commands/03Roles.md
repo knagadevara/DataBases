@@ -21,6 +21,6 @@
             # ALTER ROLE developers ADD MEMBER john_doe, jane_smith; //users
             // ALTER ROLE role_name ADD MEMBER { user_name | group_name } [, ...];
 
-- Grant SELECT privilege on the "publications" table to all roles (PUBLIC)
+- Grant SELECT privilege on the "publications" table to all roles (PUBLIC) // Do not use thi in Production!!
         
         # GRANT SELECT ON publications TO PUBLIC;
