@@ -42,11 +42,11 @@ Use the following SQL command to perform the bulk insert:
 
 Explanation:
 
-COPY: The COPY command is used to perform bulk data loading.
-<schema-name>.<table-name> : Specifies the target table and its columns to insert data into.
-(col1, col2, col3, ....): Lists the columns in the target table that correspond to the data in the CSV file.
-FROM '/path/to/InsertData.csv': Specifies the path to the CSV file containing the data to be inserted.
-DELIMITER ',': Specifies the delimiter used in the CSV file. In this case, it's a comma (,).
-CSV: Instructs PostgreSQL to interpret the file as a CSV file.
-HEADER: Indicates that the first row of the CSV file contains the column headers. This way, PostgreSQL will skip the first row during data insertion.
-After executing the COPY command, the data from the "InsertData.csv" file will be efficiently inserted into the <schema-name>.<table-name> table in a bulk manner.
+- COPY: The COPY command is used to perform bulk data loading.
+- schema-name.table-name : Specifies the target table and its columns to insert data into.
+- (col1, col2, col3, ....): Lists the columns in the target table that correspond to the data in the CSV file.
+- FROM '/path/to/InsertData.csv': Specifies the path to the CSV file containing the data to be inserted.
+- DELIMITER ',': Specifies the delimiter used in the CSV file. In this case, it's a comma (,).
+- CSV: Instructs PostgreSQL to interpret the file as a CSV file.
+- HEADER: Indicates that the first row of the CSV file contains the column headers. This way, PostgreSQL will skip the first row during data insertion.
+- After executing the COPY command, the data from the "InsertData.csv" file will be efficiently inserted into the schema-name.table-name table in a bulk manner.
