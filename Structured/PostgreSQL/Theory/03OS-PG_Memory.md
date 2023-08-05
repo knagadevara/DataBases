@@ -1,4 +1,4 @@
-###### Utility Process
+###### OperatingSystem and DB Memory
 
 ### Pages
 
@@ -45,4 +45,3 @@
 - PostgreSQL uses a process called "write-ahead logging" (WAL) to handle the writing of dirty buffers to disk. In WAL, changes are first recorded in a transaction log (the "write-ahead log") before they are applied to the actual data files. This log allows for crash recovery and replication, as well as ensures that changes are written to disk in a controlled and consistent manner.
 
 - So, in summary, data committed to the shared buffer but not yet written to the data files on disk is indeed referred to as a "dirty buffer" in the context of PostgreSQL and many other database systems.
-
