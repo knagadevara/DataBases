@@ -27,8 +27,7 @@ In this basic variation, we map an OS user to a PostgreSQL user without specifyi
 Example:
 Suppose we want to map the OS user app_user to the PostgreSQL user webapp_user.
 
-conf
-Copy code
+
 app_user  webapp_user
 Variation 2: User Mapping for Specific Database
 In this variation, we specify a database for which the user mapping is valid. The same OS user can be mapped to different PostgreSQL users based on the database they are connecting to.
@@ -36,8 +35,7 @@ In this variation, we specify a database for which the user mapping is valid. Th
 Example:
 We want to map the OS user admin_user to the PostgreSQL user db_admin specifically for the database my_database.
 
-conf
-Copy code
+
 admin_user  db_admin  my_database
 Variation 3: Mapping Multiple Users
 In this variation, we can map multiple OS users to the same PostgreSQL user or map multiple OS users to different PostgreSQL users for various databases.
@@ -45,8 +43,7 @@ In this variation, we can map multiple OS users to the same PostgreSQL user or m
 Example:
 Suppose we want to map multiple OS users to the same PostgreSQL user data_user.
 
-conf
-Copy code
+
 data_loader1  data_user
 data_loader2  data_user
 data_loader3  data_user
@@ -56,14 +53,11 @@ In this variation, we use an asterisk * in place of the OS user name to define a
 Example:
 We want to map all OS users connecting to the server to the PostgreSQL user generic_user.
 
-conf
-Copy code
+
 *  generic_user
 Note: Remember that user mapping in pg_ident.conf applies only to connections made through pg_hba.conf, which controls client authentication. If no mapping is found in pg_ident.conf, the standard authentication rules from pg_hba.conf will be applied.
 
 In conclusion, pg_ident.conf is a powerful configuration file that allows you to map OS users to PostgreSQL users for authentication purposes. With the ability to define different mappings for various databases or create global mappings, you can tailor the PostgreSQL authentication mechanism to suit specific requirements. Always use caution when making changes to this file and ensure proper access control to maintain the security and integrity of your PostgreSQL database system.
-
-Certainly! Let's continue exploring more aspects of the pg_ident.conf file and its usage in PostgreSQL:
 
 5. The Use Case for pg_ident.conf:
 The primary use case for pg_ident.conf is when you have a PostgreSQL server that allows client connections using different authentication methods (e.g., password-based, certificate-based, or trust authentication). In such scenarios, you may want to map specific OS users to different PostgreSQL users depending on how they authenticate to the server.
@@ -76,8 +70,7 @@ In pg_ident.conf, you can use wildcards to define mappings that apply to a group
 Example:
 Suppose you have multiple OS users named sales_user1, sales_user2, sales_user3, etc., and you want to map all of them to the PostgreSQL user sales_team.
 
-conf
-Copy code
+
 sales_user*  sales_team
 In this example, the wildcard * after sales_user matches any OS user whose name starts with "sales_user," and all of them will be mapped to the PostgreSQL user sales_team.
 
@@ -87,14 +80,12 @@ The pg_ident.conf file works in conjunction with the pg_hba.conf file, which is 
 Example:
 Suppose you have the following entry in pg_hba.conf:
 
-conf
-Copy code
+
 # TYPE  DATABASE  USER  ADDRESS        METHOD
 host    app_db    app_user  192.168.0.10  cert
 The pg_hba.conf entry specifies that connections to the database app_db from the IP address 192.168.0.10 will use certificate-based authentication (cert). Now, to map the OS user app_user to the PostgreSQL user webapp_user using certificate-based authentication, you define the mapping in pg_ident.conf:
 
-conf
-Copy code
+
 app_user  webapp_user
 This mapping ensures that when app_user connects from 192.168.0.10 using a certificate, PostgreSQL will map it to the user webapp_user.
 
