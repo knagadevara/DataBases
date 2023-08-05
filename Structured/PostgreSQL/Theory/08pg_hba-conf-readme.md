@@ -73,7 +73,7 @@ Remember that the order of rules in pg_hba.conf matters, and the first matching 
 
 User
 continue in detailed depth
-ChatGPT
+T
 Certainly! Let's continue with more detailed information about pg_hba.conf and explore some common scenarios and variations of the fields:
 
 7. Using METHOD with map:
