@@ -1,13 +1,21 @@
 In PostgreSQL, the UPDATE statement is used to modify existing records in a table. It allows you to change the values of one or more columns in one or multiple rows based on specified conditions. The general syntax of the 
 
 - UPDATE statement is as follows:
-    - table_name: The name of the table you want to update.
+    - <schema_name>.<table_name>: The name of the table you want to update.
     - SET: Specifies the columns and their new values that you want to update.
     - WHERE: Specifies the conditions that determine which rows should be updated. If omitted, all rows in the table will be updated.
 
-            UPDATE table_name
+        - To update a normal table.
+
+            UPDATE <schema_name>.<table_name>
             SET column1 = value1, column2 = value2, ...
             WHERE condition;
+
+        - To update a parent table.
+        
+            UPDATE ONLY <schema_name>.<table_name>
+            SET column1 = value1, column2 = value2, ...
+            WHERE condition;            
 
 
 Here are some variations and conditions that can be used with the UPDATE statement:
@@ -30,6 +38,7 @@ Here are some variations and conditions that can be used with the UPDATE stateme
         UPDATE products
         SET price = price * 1.1
         WHERE category = 'Electronics' AND price < (SELECT MAX(price) FROM products);
+
 - Updating Columns Using Mathematical Operations: You can perform mathematical operations while updating columns. 
 
         UPDATE products
@@ -44,7 +53,7 @@ Here are some variations and conditions that can be used with the UPDATE stateme
                     ELSE price * 1.1
                 END;
 
-- Returning Updated Rows: PostgreSQL allows you to use the RETURNING clause to return the rows affected by the UPDATE statement. This can be useful to retrieve the updated data. 
+- Returning Updated Rows: PostgreSQL allows you to use the RETURNING clause to return the rows affected by the UPDATE statement (Most Useful).
 
         UPDATE products
         SET stock_quantity = stock_quantity - 1
