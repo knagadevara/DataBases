@@ -1,10 +1,14 @@
-Table Partitioning in PostgreSQL - Internal Working:
+# Table Partitioning in PostgreSQL - Internal Working
+---------------------------------------------------
 
-1. Table Partitioning Methods:
-In PostgreSQL, partitioning is achieved using various partitioning methods, such as range, list, hash, and composite. Each method uses a different approach to determine which partition should store a particular row based on the partition key column's value.
+_*In PostgreSQL, partitioning is achieved using various partitioning methods, such as range, list, hash, and composite. Each method uses a different approach to determine which partition should store a particular row based on the partition key column's value. 
+The partitioning key is the column or set of columns used to determine which partition should store a particular row in a partitioned table. Constraints ensure that each partition only contains rows that match the specified criteria for that partition, guaranteeing data integrity within each partition. Partitioning key selection is critical for defining an effective partitioning strategy, it should be based on data distribution and query patterns to optimize data organization and query performance.*_
 
-    - Range Partitioning: 
-        - Range partitioning divides data into partitions based on specified ranges of values for a partition key column. PostgreSQL uses a binary search algorithm to determine the appropriate partition for each row during insertions and queries.
+- Table Partitioning Methods: 
+
+    - Range Partitioning:
+        - Range partitioning divides data into partitions based on specified ranges of values for a partition key column.
+        - PostgreSQL uses a binary search algorithm to determine the appropriate partition for each row during insertions and queries.
         - Use Cases: Suitable for partitioning data based on date ranges, numeric ranges, or any other continuous value ranges.
         - Explanation: In this example, we create a table sales with a range partition on the sale_date column. The sales table is partitioned into two child tables, sales_q1 and sales_q2, with distinct date ranges. Data with sale_date between January 1, 2023, and April 1, 2023, goes to sales_q1, while data between April 1, 2023, and July 1, 2023, goes to sales_q2.
 
@@ -82,26 +86,7 @@ In PostgreSQL, partitioning is achieved using various partitioning methods, such
                     FOR VALUES IN ('Europe');
 
 
-2. Partitioning Key and Constraints:
-    - Functionality: The partitioning key is the column or set of columns used to determine which partition should store a particular row in a partitioned table. Constraints ensure that each partition only contains rows that match the specified criteria for that partition, guaranteeing data integrity within each partition.
-    - Use Cases: Partitioning key selection is critical for defining an effective partitioning strategy. It should be based on data distribution and query patterns to optimize data organization and query performance.
-    - Explanation: In this example, the sale_date column serves as the partitioning key for the sales table. The partitions, sales_q1 and sales_q2, are defined based on specific date ranges. Each partition only contains rows with sale_date values falling within its range.
-
-            CREATE TABLE sales (
-                id SERIAL PRIMARY KEY,
-                sale_date DATE,
-                amount NUMERIC
-            )
-            PARTITION BY RANGE (sale_date);
-
-            CREATE TABLE sales_q1 PARTITION OF sales
-                FOR VALUES FROM ('2023-01-01') TO ('2023-04-01');
-
-            CREATE TABLE sales_q2 PARTITION OF sales
-                FOR VALUES FROM ('2023-04-01') TO ('2023-07-01');
-
-
-3. Partition Pruning:
+- Partition Pruning:
     - Functionality: Partition pruning is a critical optimization technique in partitioned tables. It involves eliminating partitions from query planning that are not relevant to the query's WHERE clause conditions. PostgreSQL's query planner uses constraints and exclusion conditions to perform partition pruning, reducing the number of partitions to scan during queries and improving performance.
     - Use Cases: Partition pruning is crucial for efficient querying of partitioned tables with large datasets and complex partitioning schemes.
     - Explanation: In this example, the query filters data based on a specific date range. The query planner identifies that only the sensor_data_q2 partition contains data within the specified range, so it prunes sensor_data_q1, leading to a more efficient query execution.
@@ -109,13 +94,13 @@ In PostgreSQL, partitioning is achieved using various partitioning methods, such
         SELECT * FROM sensor_data WHERE timestamp >= '2023-03-01' AND timestamp < '2023-05-01';
 
 
-4. Trigger-Based Routing:
+- Trigger-Based Routing:
     - Functionality: When inserting data into a partitioned table, PostgreSQL uses triggers to route the data to the appropriate partition. For example, when using range partitioning, a trigger function checks the partition key's value and inserts the row into the corresponding partition table.
     - Use Cases: Trigger-based routing ensures that newly inserted data goes to the correct partition without manual intervention.
     - Explanation: In this example, we create a trigger function insert_sensor_data() that routes rows to the appropriate partition (sensor_data_q1 or sensor_data_q2) based on the timestamp value. The trigger is fired before an insert operation on the sensor_data table, ensuring that the data is correctly inserted into the corresponding partition.
 
             -- Create or replace a trigger function
-            CREATE OR REPLACE FUNCTION unique_function_name()
+            CREATE OR REPLACE FUNCTION <unique-function-name>()
             RETURNS TRIGGER AS
             $$
             BEGIN
@@ -132,10 +117,10 @@ In PostgreSQL, partitioning is achieved using various partitioning methods, such
             LANGUAGE plpgsql;
 
             -- Create a trigger to route data to appropriate partitions
-            CREATE TRIGGER insert_sensor_trigger
+            CREATE TRIGGER <trigger-name>
             BEFORE INSERT ON <parent-table-name>
             FOR EACH ROW
-            EXECUTE FUNCTION unique_function_name();
+            EXECUTE FUNCTION <unique-function-name>();
 
             CREATE OR REPLACE FUNCTION insert_sensor_data()
             RETURNS TRIGGER AS
