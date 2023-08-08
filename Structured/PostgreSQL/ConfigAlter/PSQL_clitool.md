@@ -31,5 +31,6 @@
     \! clear -> clears screen in Linux
     \dt+ <schema-name> -> Lists details of objects inside the schema  
     \d+ <schema-name>.<table-name> -> to check colums and their datatypes in table
+    \i <sqlfile>.sql  -> inserts an sql file and runns it. (should be available in the location).
     \o outputFileName.txt -> Result of the query will be exported into file.
     \set AUTOCOMMIT off -> On a session level you are allowed to commit/rollback;

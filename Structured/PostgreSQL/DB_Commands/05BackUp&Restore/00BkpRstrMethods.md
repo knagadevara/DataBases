@@ -19,7 +19,7 @@ Implementation Example:
 
 3. Perform a base backup
     
-        pg_basebackup -D /path/to/backup
+        pg_basebackup -h <hostname> -U <username> -D <backup_directory> -Ft -Xs -P
 
 4. Perform continuous archiving (after the base backup is taken)
 

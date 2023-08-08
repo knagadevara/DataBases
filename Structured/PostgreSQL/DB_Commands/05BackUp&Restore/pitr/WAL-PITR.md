@@ -23,9 +23,9 @@
 
         pg_ctl restart -D /path/to/data
 
-#### 2. Perform Base Backup
+#### 2. Perform Base Backup 
 
-Before starting continuous archiving, we need to perform a base backup. This creates a starting point for point-in-time recovery.
+Before starting continuous archiving, we need to perform a base backup. This creates a starting point for point-in-time recovery. Detailed [steps](Structured/PostgreSQL/Theory/18BackUp&Restore.md)
 
 1. Stop PostgreSQL: Stop the PostgreSQL server to ensure consistency during the backup.
 
@@ -33,7 +33,7 @@ Before starting continuous archiving, we need to perform a base backup. This cre
 
 2. Take the Base Backup: Use the pg_basebackup utility to perform the base backup. The -D option specifies the backup destination directory.
 
-        pg_basebackup -D /path/to/backup
+        pg_basebackup -h <hostname> -U <username> -D <backup_directory> -Ft -Xs -P
 
 #### 3. Start Continuous Archiving
 
@@ -43,6 +43,10 @@ Now that the base backup is complete, we can start continuous archiving to keep 
 
         pg_ctl start -D /path/to/data
 
+2. Test if archiving is working on the configured path by creating WAL file
+
+        # SELECT pg_switch_wal(); // creates it
+
 #### 4. Perform Point-in-Time Recovery (PITR)
 
 In case of data loss or the need to restore the database to a specific point in time, we can perform point-in-time recovery using the archived WAL files.
@@ -51,34 +55,68 @@ In case of data loss or the need to restore the database to a specific point in 
 
         pg_ctl stop -D /path/to/data
 
-2.  Create a Recovery Configuration File: Create a file named recovery.conf in the PostgreSQL data directory with the following contents.
+2.  Create a Recovery Configuration File: 
+    - Version less than PG12: Create a file named recovery.conf in the PostgreSQL data directory with the contents.
 
-    - restore_command: Specifies the command to copy the necessary WAL files from the archive to the recovery location.
-    - recovery_target_time: Specifies the time to which the database should be restored.
-    - recovery_target_action: Determines what PostgreSQL should do after reaching the recovery target. In this example, we use 'promote' to promote the database to a writable state after recovery
+                touch recovery.conf
 
-            restore_command = 'cp /path/to/archive/%f %p'
-            recovery_target_time = 'YYYY-MM-DD HH:MI:SS'
-            recovery_target_action = 'promote'
+    - Version more than PG12: Create a file named recovery.signal in the PostgreSQL data directory. Add the contents to postgresql.conf/postgresql.auto.conf
+
+                touch recovery.signal
+
+        - restore_command: Specifies the command to copy the necessary WAL files from the archive to the recovery location.
+        - recovery_target_inclusive: (Default -> On) Specifies to stop the recovery after target is reached(ON) or
+        just before the target is reached(OFF).
+        - recovery_target_time: Specifies the time to which the database should be restored.
+        - recovery_target_action: Determines what PostgreSQL should do after reaching the recovery target. In this example, we use 'promote' to promote the database to a writable state after recovery
+
+                        restore_command = 'cp /path/to/archive/%f %p'
+                        recovery_target_time = 'YYYY-MM-DD HH:MI:SS'
+                        recovery_target_action = 'promote'
+                        recovery_target_inclusive = on
 
 3. Start PostgreSQL in Recovery Mode: Start the PostgreSQL server in recovery mode with the -o option to specify the recovery configuration file.
 
-        pg_ctl start -D /path/to/data -o "-c config_file=/path/to/data/recovery.conf"
+                pg_ctl start -D /path/to/data -o "-c config_file=/path/to/data/recovery.conf"
+                pg_ctl start -D /path/to/data // above PG-Ver 12
 
 
-After starting the server in recovery mode, PostgreSQL will automatically apply the necessary archived WAL files to reach the specified recovery target time. Once the recovery is complete, the database will be in a consistent state, allowing read-write operations.
+4. Monitor progress and check logs:
+        - After starting the server in recovery mode, PostgreSQL will automatically apply the necessary archived WAL files to reach the specified recovery target time. Once the recovery is complete, the database will be in a consistent state, allowing read-write operations.
+        - To accept connections give the below command
+
+                # SELECT pg_wal_replay_resume();
 
 ### Variations in PITR:
 
 - Restore to a Specific Time: Instead of restoring to a specific time, you can restore to a specific transaction log file or log sequence number (LSN) using recovery_target_xid or recovery_target_lsn in the recovery.conf file.
+        - To check the current WAL **L**ast **S**equence **N**umber.
+
+                # SELECT pg_current_wal_lsn() as "XID", pg_walfile_name(pg_current_wal_lsn()) as "Name" 
 
 - Restore to a Named Restore Point: You can set recovery_target_name in the recovery.conf file to restore to a named restore point created using pg_create_restore_point during the base backup.
+        - To create a restore point manually
+
+                # SELECT pg_create_restore_point('restore_point_name');
+
+        - To restore to the last restore point
+                
+                // For PostgreSQL 15 and earlier (recovery.conf):
+                recovery_target_name = 'restore_point_name'
+                restore_command = 'cp /path/to/archive/%f %p'
+
+                // For PostgreSQL 16 and later (postgresql.auto.conf):
+                restore_command = 'cp /path/to/archive/%f %p'
+                recovery_target = 'immediate'
+                recovery_target_action = 'promote'
 
 - Restore to End of Logs: If you don't specify a target time or target LSN, PostgreSQL will automatically restore to the end of the available WAL logs, effectively undoing any uncommitted transactions.
 
-- Restoring with restore_command: Instead of using a simple cp command in the restore_command, you can use more advanced methods like syncing to a remote location or using third-party archiving tools.
+        restore_command = 'cp /path/to/archive/%f %p'
+        recovery_target = 'immediate'
 
-- Other commands which can go: 
+
+- restore_command: Instead of using a simple cp command in the restore_command, you can use more advanced methods like syncing to a remote location or using third-party archiving tools.
 
     1. rsync: The rsync command is a popular utility for efficiently synchronizing files and directories between different locations. It can be used to copy WAL files to the archive directory in a more optimized manner.
 
@@ -111,6 +149,7 @@ After starting the server in recovery mode, PostgreSQL will automatically apply 
             restore_command = 'az storage blob download --account-name myaccount --account-key mykey --container-name mycontainer --name %f --destination %p'
 
     7. Invoking a script: In PostgreSQL, you can invoke a script in place of a command for configuration parameters like archive_command and restore_command. Invoking a script allows you to execute more complex logic and operations as part of archiving or restoration processes. To achieve this, you need to specify the script path and any necessary arguments in the configuration file (postgresql.conf).
+
     - Source(archive_command): In the configuration, %p and %f are placeholders representing the full path of the WAL file to be archived and the filename of the WAL file, respectively. The script (your_script.sh) will be executed with these arguments when a new WAL file needs to be archived.
     Here's how you can invoke a script for archive_command and restore_command:
 
@@ -147,7 +186,6 @@ After starting the server in recovery mode, PostgreSQL will automatically apply 
             # Copy the compressed backup to AWS S3
             aws s3 cp "$ARCHIVE_DIR/$WAL_FILENAME.gz" "s3://$S3_BUCKET/"
             --------------------------------------------------------------------------------
-
 
     - Destination(restore_command): Similarly %p and %f represent the full path of the destination file where the WAL segment needs to be restored and the filename of the WAL segment to be restored, respectively. The script will be executed with these arguments during the restoration process.
 
@@ -191,5 +229,19 @@ After starting the server in recovery mode, PostgreSQL will automatically apply 
             --------------------------------------------------------------------------------
 
 Note: To enable continuous archiving with PITR successfully, it's crucial to regularly monitor the archive directory and the available disk space to ensure sufficient storage for archived WAL files.
+
+        // Only one of the target is allowed.
+        restore_command
+        recovery_target_inclusive
+                AND
+        recovery_target // Once the consistency is reached recovery is stopped 'immediately'
+                OR
+        recovery_target_name // The name of the previous successfull checkpoint
+                OR
+        recovery_target_xid // The LSN id details
+                OR
+        recovery_target_lsn // LSN name
+                OR
+        recovery_target_time // PITR, the time till which the recovery shall be done.
 
 In conclusion, Continuous Archiving with Point-in-Time Recovery (PITR) provides a robust method for online backups and the ability to recover the database to a specific point in time. By following the above configuration and variations, administrators can ensure a reliable backup and restoration process, allowing for data integrity and business continuity.
