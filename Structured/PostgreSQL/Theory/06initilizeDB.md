@@ -9,8 +9,7 @@ Heap Storage:
 As mentioned earlier, the default storage method in PostgreSQL is the heap storage. It organizes data into tables where each table is a collection of rows (tuples), and each row contains fields (columns) with specific data types. PostgreSQL supports ACID (Atomicity, Consistency, Isolation, Durability) properties, ensuring data integrity and reliability.
 Example Table in PostgreSQL:
 
-sql
-Copy code
+
 CREATE TABLE employees (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -31,8 +30,7 @@ Partitioning:
 Partitioning is a technique used to divide a large table into smaller, more manageable pieces (partitions) based on certain criteria, such as a range of values or a specific attribute. Partitioning can improve query performance, data management, and maintenance.
 Example Partitioning in PostgreSQL:
 
-sql
-Copy code
+
 CREATE TABLE employees_partitioned (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -45,8 +43,7 @@ Foreign Data Wrappers (FDW):
 Foreign Data Wrappers allow PostgreSQL to access data from external data sources such as other databases, web services, or files. It enables PostgreSQL to act as a gateway to diverse data sources, allowing users to query and manipulate external data as if it were part of the local database.
 Example Foreign Data Wrapper in PostgreSQL (using postgres_fdw):
 
-sql
-Copy code
+
 CREATE SERVER my_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host 'remote_host', dbname 'remote_db');
 CREATE USER MAPPING FOR local_user SERVER my_server OPTIONS (user 'remote_user', password 'remote_password');
 CREATE FOREIGN TABLE remote_table (
@@ -59,8 +56,7 @@ Extensions:
 PostgreSQL allows the addition of third-party extensions that extend the database's functionality. Extensions can include new data types, operators, functions, and other features. Some extensions can have a significant impact on data storage and retrieval.
 Example Extension in PostgreSQL (using hstore):
 
-sql
-Copy code
+
 CREATE EXTENSION hstore;
 In this example, we enable the hstore extension, which provides a key-value data type that allows flexible storage of semi-structured data within a single column.
 
@@ -90,8 +86,7 @@ pg_ctl (PostgreSQL Control Program):
 pg_ctl is a command-line utility used to control the PostgreSQL database server. It allows you to start, stop, and restart the server, as well as perform other administrative tasks.
 Example Usage:
 
-bash
-Copy code
+
 pg_ctl start -D /path/to/data_directory
 This command starts the PostgreSQL server using the specified data directory.
 

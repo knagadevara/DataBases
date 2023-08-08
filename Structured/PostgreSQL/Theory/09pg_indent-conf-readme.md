@@ -76,8 +76,7 @@ This mapping ensures that when app_user connects from 192.168.0.10 using a certi
 8. Reload and Apply Changes:
 After making any changes to pg_ident.conf, you need to reload the PostgreSQL server for the changes to take effect. You can do this by using the pg_ctl utility or by executing pg_ctl reload as the PostgreSQL superuser.
 
-bash
-Copy code
+
 pg_ctl reload -D /path/to/data/directory
 9. Security Considerations:
 When using pg_ident.conf, it is essential to consider security implications. Make sure to restrict access to the file to prevent unauthorized changes. Only users with appropriate privileges, typically the PostgreSQL superuser, should have read access to pg_ident.conf. Additionally, avoid mapping trusted OS users to highly privileged PostgreSQL users, as it may lead to potential security risks.

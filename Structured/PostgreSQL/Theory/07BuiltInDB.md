@@ -12,8 +12,6 @@ The postgres database does not contain any user data. Instead, it contains vario
 Configuration Example:
 To connect to the postgres database using the psql command-line utility, use the following command:
 
-bash
-Copy code
 $ psql -U postgres -d postgres
 template0 and template1 Databases:
 The template0 and template1 databases are template databases provided by PostgreSQL. Template databases serve as templates for creating new databases in PostgreSQL. The template0 database is read-only and provides a clean, default template for new databases. The template1 database, on the other hand, can be modified and serves as a customizable template for new databases.
@@ -27,8 +25,7 @@ The template0 and template1 databases are regular PostgreSQL databases and have 
 Configuration Example:
 To create a new database based on the template1 database, use the following SQL command:
 
-sql
-Copy code
+
 CREATE DATABASE my_database TEMPLATE template1;
 pg_catalog Database:
 The pg_catalog database is a system catalog database in PostgreSQL. It contains the system catalogs, which are collections of tables and views that store metadata about the database objects and system settings.
@@ -54,8 +51,7 @@ The information_schema database contains a set of views, tables, and routines th
 Configuration Example:
 To query the information_schema views to retrieve information about tables and columns, use SQL queries like the following:
 
-sql
-Copy code
+
 -- Get a list of all tables in the current database
 SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';
 

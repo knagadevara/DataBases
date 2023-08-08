@@ -142,8 +142,7 @@ Postgres Process: PostgreSQL constantly monitors postgresql.auto.conf for change
 Layout and Configuration Example:
 The postgresql.auto.conf file is not meant for direct user editing. Instead, configuration changes are made using SQL commands such as ALTER SYSTEM. For example:
 
-sql
-Copy code
+
 -- Change work_mem setting dynamically
 ALTER SYSTEM SET work_mem = '64MB';
 After executing the ALTER SYSTEM command, the new value is saved in postgresql.auto.conf and takes effect immediately.

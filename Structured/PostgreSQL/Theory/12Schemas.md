@@ -30,16 +30,14 @@ Let's grant the "sales_team" group the ability to create tables, views, and sequ
         GRANT CREATE ON SCHEMA sales TO sales_team;
 Qualifying Objects with Schema Names:
 To access objects within a schema, you must qualify the object name with the schema name. For example, to access a table named "orders" within the "sales" schema, you would write the query as follows:
-sql
-Copy code
+
 SELECT * FROM sales.orders;
 Setting the Default Schema for a Role:
 Each role in PostgreSQL has a search path that determines the order in which schemas are searched when unqualified object names are used in queries. The first schema in the search path is the default schema.
 Example of Setting a Default Schema for a Role:
 Let's set the default schema for the "sales_team" group to be the "sales" schema:
 
-sql
-Copy code
+
 -- Set the default schema for the "sales_team" group
 ALTER ROLE sales_team SET search_path TO sales, public;
 In this example, the "sales" schema is added to the search path before the default "public" schema. Now, when the "sales_team" group executes a query without specifying a schema, PostgreSQL will search for objects in the "sales" schema first.
@@ -49,8 +47,7 @@ In a multitenant application scenario, you can create separate schemas for each 
 Example of Multitenant Schemas:
 Assuming you have a multitenant application with three tenants (A, B, and C), you can create separate schemas for each tenant:
 
-sql
-Copy code
+
 -- Create schemas for tenants A, B, and C
 CREATE SCHEMA tenant_a AUTHORIZATION tenant_a_group;
 CREATE SCHEMA tenant_b AUTHORIZATION tenant_b_group;
@@ -65,8 +62,7 @@ By default, when a new user is created in PostgreSQL, their search path includes
 
 Example of Setting a Default Schema for a Role:
 
-sql
-Copy code
+
 -- Set the default schema for the "sales_team" group
 ALTER ROLE sales_team SET search_path TO sales, public;
 In this example, the "sales" schema is added to the search path before the default "public" schema. Now, when the "sales_team" group executes a query without specifying a schema, PostgreSQL will search for objects in the "sales" schema first.
@@ -77,8 +73,7 @@ The owner of a schema has certain privileges and can control the objects within 
 
 Example of Creating a Schema with Specified Owner:
 
-sql
-Copy code
+
 CREATE SCHEMA marketing AUTHORIZATION marketing_manager;
 In this example, the "marketing_manager" role is specified as the owner of the "marketing" schema. As the owner, the "marketing_manager" role will have full control over the schema and its objects.
 
@@ -86,14 +81,12 @@ Schema Renaming and Transfer of Ownership:
 In PostgreSQL, you can rename a schema using the ALTER SCHEMA command. Additionally, you can transfer ownership of a schema to another role using the ALTER SCHEMA ... OWNER TO command.
 Example of Renaming a Schema:
 
-sql
-Copy code
+
 -- Rename the "old_schema" to "new_schema"
 ALTER SCHEMA old_schema RENAME TO new_schema;
 Example of Transferring Ownership of a Schema:
 
-sql
-Copy code
+
 -- Transfer ownership of the "sales" schema to the "sales_manager" role
 ALTER SCHEMA sales OWNER TO sales_manager;
 Shared Objects in Schemas:
@@ -102,8 +95,7 @@ However, schemas can be used to share objects among different roles. For example
 
 Example of Sharing Objects within a Schema:
 
-sql
-Copy code
+
 -- Create a table in the "shared_schema"
 CREATE TABLE shared_schema.employee (
     id SERIAL PRIMARY KEY,
@@ -120,8 +112,7 @@ In a multitenant application scenario, where multiple tenants share the same dat
 Example of Multitenant Schemas (Continued):
 Continuing from the previous example, suppose the application has three tenants (A, B, and C):
 
-sql
-Copy code
+
 -- Create schemas for tenants A, B, and C
 CREATE SCHEMA tenant_a AUTHORIZATION tenant_a_group;
 CREATE SCHEMA tenant_b AUTHORIZATION tenant_b_group;
@@ -138,8 +129,7 @@ You can change the ownership of a table using the ALTER TABLE command with the O
 
 Example of Changing Table Ownership:
 
-sql
-Copy code
+
 -- Change ownership of the "orders" table in the "sales" schema to "sales_manager"
 ALTER TABLE sales.orders OWNER TO sales_manager;
 In this example, the "sales_manager" role becomes the new owner of the "orders" table within the "sales" schema.
@@ -150,8 +140,7 @@ You can modify the search path for a role using the SET command.
 
 Example of Modifying Search Path for a Role:
 
-sql
-Copy code
+
 -- Set the search path for the "marketing_team" group
 ALTER ROLE marketing_team SET search_path TO marketing, public;
 In this example, the search path for the "marketing_team" group is modified to first look in the "marketing" schema and then in the "public" schema.
@@ -169,8 +158,7 @@ Schema Security and Privileges:
 As with other database objects, schemas are subject to access control and privileges. You can grant various privileges on a schema to control who can access, modify, and create objects within that schema.
 Example of Granting Privileges on a Schema:
 
-sql
-Copy code
+
 -- Grant USAGE and CREATE privileges on the "marketing" schema to the "marketing_team" group
 GRANT USAGE, CREATE ON SCHEMA marketing TO marketing_team;
 In this example, the "marketing_team" group is granted the ability to use and create objects in the "marketing" schema.
@@ -184,14 +172,12 @@ Let's say you have two schemas, "sales" and "inventory." Within the "sales" sche
 
 To refer to the "products" table from the "orders" table without fully qualifying the table name, you can set the search path appropriately:
 
-sql
-Copy code
+
 -- Set the search path for the "sales" schema to include the "inventory" schema
 ALTER ROLE sales_team SET search_path TO sales, inventory, public;
 Now, within the "orders" table in the "sales" schema, you can reference the "products" table in the "inventory" schema like this:
 
-sql
-Copy code
+
 -- Within the "sales.orders" table, reference the "inventory.products" table
 SELECT product_name, price FROM inventory.products;
 Schema as a Namespace:
@@ -199,8 +185,7 @@ In PostgreSQL, a schema acts as a namespace for database objects. This means tha
 Example of Namespace Separation with Schemas:
 Suppose you have two schemas, "sales" and "marketing," each containing a table named "customers." Because these tables are in separate schemas, there is no ambiguity in their names:
 
-sql
-Copy code
+
 -- Query the "customers" table in the "sales" schema
 SELECT * FROM sales.customers;
 
@@ -216,16 +201,14 @@ Renaming and Dropping Schemas:
 You can rename a schema using the ALTER SCHEMA command with the RENAME TO clause. Renaming a schema changes its name but does not change the owner or move the schema's objects.
 Example of Renaming a Schema:
 
-sql
-Copy code
+
 -- Rename the "old_schema" to "new_schema"
 ALTER SCHEMA old_schema RENAME TO new_schema;
 To remove a schema from the database, you can use the DROP SCHEMA command. However, dropping a schema will permanently delete all objects within that schema, so exercise caution when using this command.
 
 Example of Dropping a Schema:
 
-sql
-Copy code
+
 -- Drop the "obsolete_schema" and all its objects
 DROP SCHEMA obsolete_schema CASCADE;
 The CASCADE option ensures that all objects within the schema are dropped along with the schema.

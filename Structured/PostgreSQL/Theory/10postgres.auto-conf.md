@@ -22,8 +22,7 @@ As mentioned earlier, there are no variations of fields in postgresql.auto.conf 
 
 To better understand the dynamically changed settings, you can query the pg_settings view to see the current values and their source (e.g., default, configuration file, command-line, or postmaster.opts). For example:
 
-sql
-Copy code
+
 SELECT name, setting, source FROM pg_settings;
 This query will show the name, current value, and source of each configuration parameter. Parameters sourced from postmaster.opts will be displayed as "configuration file."
 

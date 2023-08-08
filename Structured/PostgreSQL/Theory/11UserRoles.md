@@ -10,8 +10,7 @@ Ownership: Users can be designated as owners of database objects they create. An
 Example of Creating a User:
 To create a new user, you can use the CREATE USER SQL command:
 
-sql
-Copy code
+
 CREATE USER john_doe WITH PASSWORD 'password';
 Groups:
 In PostgreSQL, a group is a collection of users. Instead of managing permissions individually for each user, you can assign permissions to a group, and all members of that group inherit those permissions. Group membership simplifies permission management for users with similar access requirements.
@@ -22,13 +21,11 @@ Simplified Maintenance: If new users join a team or project, they can be added t
 Example of Creating a Group and Adding Users to it:
 To create a new group, you can use the CREATE GROUP SQL command:
 
-sql
-Copy code
+
 CREATE GROUP marketing_team;
 To add users to the newly created group, you can use the ALTER GROUP SQL command:
 
-sql
-Copy code
+
 ALTER GROUP marketing_team ADD USER john_doe, jane_smith;
 Roles:
 In PostgreSQL, a role is a flexible concept that represents a user, group, or a combination of both. Roles can have login privileges, meaning they can connect to the database, or be non-login roles, which are used for managing permissions but cannot be used to establish database connections.
@@ -39,21 +36,18 @@ Role Hierarchy: PostgreSQL supports role hierarchy, where one role can be a memb
 Example of Creating a Role:
 To create a new role, you can use the CREATE ROLE SQL command:
 
-sql
-Copy code
+
 CREATE ROLE admin;
 Example of Granting Permissions to a Role:
 To grant permissions to a role, you can use the GRANT SQL command:
 
-sql
-Copy code
+
 -- Grant SELECT privilege on the "employees" table to the "admin" role
 GRANT SELECT ON employees TO admin;
 Example of Creating a Role Hierarchy:
 You can create a role hierarchy by making one role a member of another:
 
-sql
-Copy code
+
 -- Create a role hierarchy where "admin" is a member of "marketing_team"
 GRANT admin TO marketing_team;
 In this example, the "marketing_team" group has been assigned the "admin" role, allowing all members of the "marketing_team" group to inherit the privileges granted to the "admin" role.
@@ -64,8 +58,7 @@ Using ALTER ROLE Command:
 The ALTER ROLE command in PostgreSQL allows you to modify attributes and settings of existing roles, including adding and removing members (users or groups) from a role.
 Syntax for Adding Users or Groups to a Role:
 
-sql
-Copy code
+
 ALTER ROLE role_name [WITH] ADD MEMBER { user_name | group_name } [, ...];
 Explanation:
 
@@ -76,15 +69,13 @@ user_name or group_name: The name of the user or group that you want to add to t
 Example of Adding Users/Groups to a Role:
 Let's say you have a role named "developers," and you want to add two users, "john_doe" and "jane_smith," as members of the "developers" role:
 
-sql
-Copy code
+
 ALTER ROLE developers ADD MEMBER john_doe, jane_smith;
 Using GRANT Command for Role Membership:
 Another way to add users or groups to a role is by using the GRANT command and specifying the role as a member of another role. This establishes a role hierarchy where the target role becomes a member of the specified role.
 Syntax for Granting Membership to a Role:
 
-sql
-Copy code
+
 GRANT role_name TO { user_name | group_name | PUBLIC } [, ...];
 Explanation:
 
@@ -93,8 +84,7 @@ user_name, group_name, or PUBLIC: The name of the user, group, or the keyword "P
 Example of Granting Membership to a Role:
 Continuing with the "developers" role example, let's grant membership of the "developers" role to the "development_team" group:
 
-sql
-Copy code
+
 GRANT developers TO development_team;
 This makes all members of the "development_team" group automatically become members of the "developers" role and inherit its permissions.
 
@@ -111,8 +101,7 @@ Using ALTER ROLE Command:
 The ALTER ROLE command in PostgreSQL allows you to modify attributes and settings of existing roles, including adding and removing members (users or groups) from a role.
 Syntax for Adding Users or Groups to a Role:
 
-sql
-Copy code
+
 ALTER ROLE role_name [WITH] ADD MEMBER { user_name | group_name } [, ...];
 Explanation:
 
@@ -123,15 +112,13 @@ user_name or group_name: The name of the user or group that you want to add to t
 Example of Adding Users/Groups to a Role:
 Let's say you have a role named "developers," and you want to add two users, "john_doe" and "jane_smith," as members of the "developers" role:
 
-sql
-Copy code
+
 ALTER ROLE developers ADD MEMBER john_doe, jane_smith;
 Using GRANT Command for Role Membership:
 Another way to add users or groups to a role is by using the GRANT command and specifying the role as a member of another role. This establishes a role hierarchy where the target role becomes a member of the specified role.
 Syntax for Granting Membership to a Role:
 
-sql
-Copy code
+
 GRANT role_name TO { user_name | group_name | PUBLIC } [, ...];
 Explanation:
 
@@ -140,8 +127,7 @@ user_name, group_name, or PUBLIC: The name of the user, group, or the keyword "P
 Example of Granting Membership to a Role:
 Continuing with the "developers" role example, let's grant membership of the "developers" role to the "development_team" group:
 
-sql
-Copy code
+
 GRANT developers TO development_team;
 This makes all members of the "development_team" group automatically become members of the "developers" role and inherit its permissions.
 
