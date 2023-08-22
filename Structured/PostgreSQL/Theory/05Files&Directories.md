@@ -211,7 +211,7 @@ a. Crash Recovery: In the event of a crash or unexpected shutdown, PostgreSQL us
 
 b. Replication: The WAL is also used for replication, a process where a standby (replica) server receives and applies the same changes as the primary server. This allows the standby server to stay synchronized with the primary server and serve as a backup or for scaling read-only queries.
 
-Example WAL File: 00000001000000040000002F
+        Example WAL File: 00000001000000040000002F
 
 In this example, the WAL file name consists of a series of numbers separated by periods. These numbers represent the timeline and the segment of the WAL file. The WAL writer creates these files and maintains them as changes are made to the database.
 
