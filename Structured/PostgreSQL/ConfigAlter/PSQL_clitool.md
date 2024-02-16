@@ -15,22 +15,22 @@
 
 - Internal DB commands.
 
-    \conninfo -> Gives connection details
-    \l+ -> List the number of databases in DB-System
-    \dn+ -> Lists all the Schemas in Database
-    \df+ -> Lists all Functions in Database
-    \dv+ -> Lists all Views in Database
-    \du+ -> Lists all Users/Roles in Database
-    \ds+ -> Lists all Sequences in Database
-    \g -> Run previous successfull command
-    \timing -> set start/stop time before executing a query
-    \e -> edit your previously failed query in a editor
-    \ef <function-name> -> edit your function in a editor
-    \c <db-name> -> to connect to a database
-    \! <command> -> to run environment specific commands
-    \! clear -> clears screen in Linux
-    \dt+ <schema-name> -> Lists details of objects inside the schema  
-    \d+ <schema-name>.<table-name> -> to check colums and their datatypes in table
-    \i <sqlfile>.sql  -> inserts an sql file and runns it. (should be available in the location).
-    \o outputFileName.txt -> Result of the query will be exported into file.
-    \set AUTOCOMMIT off -> On a session level you are allowed to commit/rollback;
+        \conninfo -> Gives connection details
+        \l+ -> List the number of databases in DB-System
+        \dn+ -> Lists all the Schemas in Database
+        \df+ -> Lists all Functions in Database
+        \dv+ -> Lists all Views in Database
+        \du+ -> Lists all Users/Roles in Database
+        \ds+ -> Lists all Sequences in Database
+        \g -> Run previous successfull command
+        \timing -> set start/stop time before executing a query
+        \e -> edit your previously failed query in a editor
+        \ef <function-name> -> edit your function in a editor
+        \c <db-name> -> to connect to a database
+        \! <command> -> to run environment specific commands
+        \! clear -> clears screen in Linux
+        \dt+ <schema-name> -> Lists details of objects inside the schema  
+        \d+ <schema-name>.<table-name> -> to check colums and their datatypes in table
+        \i <sqlfile>.sql  -> inserts an sql file and runns it. (should be available in the location).
+        \o outputFileName.txt -> Result of the query will be exported into file.
+        \set AUTOCOMMIT off -> On a session level you are allowed to commit/rollback;
